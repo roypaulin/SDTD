@@ -1,0 +1,26 @@
+- name: Install pip
+  become: True
+  apt:
+    name: python3-pip
+    update_cache: yes
+
+- name: Create requirements
+  template:
+    src: requirements.txt
+    dest: "/home/ubuntu/"
+    mode: 0644
+
+- name: Create twitter credentials file
+  template:
+    src: .env
+    dest: "/home/ubuntu/"
+    mode: 0644
+
+- name: Pip install
+  shell: pip3 install -r requirements.txt
+
+- name: Create twitter-publisher.py
+  template:
+    src: twitter-publisher.py
+    dest: "/home/ubuntu/"
+    mode: 0755

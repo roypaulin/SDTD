@@ -1,0 +1,65 @@
+- name: Creating local SSH Config
+  hosts: localhost
+  become: False
+  connection: local
+  tasks:
+    - name: Generating ssh_config from template
+      template:
+        src: "templates/ssh_config"
+        dest: "{{ ansible_env.PWD }}/ssh_config"
+
+- name: Host Prerequisites
+  hosts: zookeeper:kafka_broker:control_center
+  tasks:
+  - import_role:
+      name: confluent.common
+  - import_role:
+      name: confluent.ssl
+    when: ssl_enabled|bool
+
+- name: Zookeeper Provisioning
+  hosts: zookeeper
+  gather_facts: no
+  tags:
+    - zookeeper
+  tasks:
+  - import_role:
+      name: confluent.zookeeper
+
+- name: Kafka Broker Provisioning
+  hosts: kafka_broker
+  gather_facts: no
+  tags:
+    - kafka_broker
+  tasks:
+  - import_role:
+      name: confluent.kafka_broker
+
+- name: Control Center Provisioning
+  hosts: control_center
+  gather_facts: no
+  tags:
+    - control_center
+  tasks:
+  - import_role:
+      name: confluent.control_center
+
+- name: Twitter Environment Provisioning
+  hosts: control_center
+  become: False
+  gather_facts: no
+  tags:
+    - control_center
+  tasks:
+  - import_role:
+      name: twitter.environment
+
+- name: Creating Scala Consummer for Twitter
+  hosts: localhost
+  become: False
+  connection: local
+  tasks:
+    - name: Generating twitter.scala file from template
+      template:
+        src: "templates/twitter.scala.j2"
+        dest: "{{ ansible_env.PWD }}/twitter.scala"

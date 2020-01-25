@@ -1,0 +1,59 @@
+## DEPLOYING KUBERNETES WITH KOPS ##
+
+# First-Steps
+
+1) Installing kops:
+- MacOS
+curl -o kops-bin -L https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-darwin-amd64
+- Linux
+curl  -o kops-bin -L https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+
+chmod +x kops-bin
+
+ln -s $(pwd)/kops-bin /usr/local/bin/kops
+
+2) Create domain DNS
+aws route53 create-hosted-zone --name k8s.rabbitnode.stream --caller-reference 1
+
+# Take note of Nameservers and create NS records with the desired subdomain (in the previous command, it was dev)
+
+3) Check the records were well created
+dig NS k8s.rabbitnode.stream
+
+4) Create bucket s3 to store states (before export your AWS Credentials)
+export aws_credentials
+aws s3 mb s3://clusters.k8s.rabbitnode.stream
+
+5) Export bucket name saved on aws_credentials
+export KOPS_STATE_STORE=s3://clusters.k8s.rabbitnode.stream
+OR
+source aws_credentials
+
+6) Define cluster
+kops create cluster --zones=us-east-2a k8s.rabbitnode.stream
+
+7) Create (and run) cluster
+kops update cluster useast1.dev.example.com --yes
+
+8) Install Dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-rc1/aio/deploy/recommended.yaml
+
+# Getting Bearer Token
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+kubectl proxy &
+
+# Accessing the dashboard:
+# http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+
+
+
+# USEFULL COMMANDS:
+kops get cluster # List clusters
+kops edit cluster useast1.dev.example.com # Edit cluster
+kops edit ig --name=useast1.dev.example.com nodes # Edit node instances
+kops edit ig --name=useast1.dev.example.com master-us-east-1c # Edit master instances
+kops update cluster --yes # Update cluster
+kops rolling-update cluster # Immediat deploy
+
+# Deleting cluster
+kops delete cluster useast1.dev.example.com --yes
