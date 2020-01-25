@@ -88,7 +88,7 @@ cd ${BASE_DIR}
 echo -e "\nStarting kafka publisher..."
 
 # Start python script on control-center
-# ssh -f -F ssh_config kafka-control-center-01 'nohup ./twitter-publisher.py &'
+ssh -f -F ssh_config kafka-control-center-01 'nohup ./twitter-publisher.py &'
 
 echo -e "\nBuilding scala subscriber..."
 
