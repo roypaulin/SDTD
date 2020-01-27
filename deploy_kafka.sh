@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function aborting() {
-  echo "Aborting script."
+  echo -e "\nAborting script.\n"
   exit 0
 }
 
@@ -17,13 +17,14 @@ BASE_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 KAFKA_DIR="${BASE_DIR}/kafka"
 
-# Load environment variables
+# Load environment variables and compy templates
 source ${BASE_DIR}/env/aws.env
 cp ${BASE_DIR}/env/twitter.env ${KAFKA_DIR}/ansible/roles/twitter.environment/templates/.env
+cp ${KAFKA_DIR}/twitter/twitter-publisher.py ${KAFKA_DIR}/ansible/roles/twitter.environment/templates/twitter-publisher.py
 
 # Check if asked to destroy
 if [ $1 == "destroy" ]; then
-  echo -e "\nDestroying kafka instances..."
+  echo -e "\nDestroying kafka cluster..."
   cd ${KAFKA_DIR}/terraform
   terraform destroy -auto-approve
   if [ $? -eq 0 ]; then
@@ -32,10 +33,10 @@ if [ $1 == "destroy" ]; then
     rm ${BASE_DIR}/SDTD-assembly-1.0.jar > /dev/null 2>&1
     rm ${BASE_DIR}/ssh_keys/kafka-key* > /dev/null 2>&1
     rm ${BASE_DIR}/ssh_config > /dev/null 2>&1
-  	echo -e "\nInstances removed!\n"
+  	echo -e "\n Kafka cluster removed!\n"
   	exit 0
   else
-    echo -e "\nProblem removing instances.\n"
+    echo -e "\nProblem removing kafka cluster.\n"
     exit 1
   fi
 fi

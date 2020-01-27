@@ -12,4 +12,4 @@ rm -rf ${BASE_DIR}/target
 rm -rf ${BASE_DIR}/project/target
 rm -rf ${BASE_DIR}/project/project
 rm -rf ${BASE_DIR}/project/build.properties
-rm -rf ${BASE_DIR}/src/main/scala/*
+#rm -rf ${BASE_DIR}/src/main/scala/*
