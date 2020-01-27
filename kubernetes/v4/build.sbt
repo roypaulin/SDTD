@@ -3,27 +3,31 @@ lazy val root = (project in file(".")).
     name := "SDTD",
     version := "1.0",
     scalaVersion := "2.11.9",
-    mainClass in Compile := Some("SDTD.WordCount")        
+    mainClass in Compile := Some("SDTD.TwitterStream")        
   )
 
-libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-sql" % "2.4.4" % "provided",
-  "com.datastax.spark" %% "spark-cassandra-connector" % "2.4.2",
-  "com.datastax.oss" % "java-driver-core" % "4.4.0",
-  "com.datastax.oss" % "java-driver-query-builder" % "4.4.0",
-  "com.datastax.oss" % "java-driver-mapper-runtime" % "4.4.0"
-)
+resolvers += Resolver.sbtPluginRepo("releases")
 
-mergeStrategy in assembly ~= (old =>{
-    case PathList("META-INF", xs @ _*) => MergeStrategy.discard
-    case x => MergeStrategy.first
-  }
-)
-// name := "SDTD"
-// version := "1.0"
-// scalaVersion := "2.11.8"
-// libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.4.4"
-// libraryDependencies += "com.datastax.oss" % "java-driver-core" % "4.4.0"
-// libraryDependencies += "com.datastax.oss" % "java-driver-query-builder" % "4.4.0"
-// libraryDependencies += "com.datastax.oss" % "java-driver-mapper-runtime" % "4.4.0"
+libraryDependencies ++= {
+	val sparkVer = "2.4.4"
+	Seq(
+		"org.apache.spark" %% "spark-sql" % sparkVer % "provided",
+		"org.apache.spark" %% "spark-core" % sparkVer % "provided",
+		"org.apache.spark" % "spark-streaming_2.11" % sparkVer % "provided",
+	    "org.apache.spark" % "spark-streaming-kafka-0-10_2.11" % sparkVer,
+	    "com.datastax.spark" %% "spark-cassandra-connector" % "2.4.2",
+  	    "com.datastax.oss" % "java-driver-core" % "4.4.0",
+  	    "com.datastax.oss" % "java-driver-query-builder" % "4.4.0",
+  	    "com.datastax.oss" % "java-driver-mapper-runtime" % "4.4.0",
+	)
+}
 
+assemblyMergeStrategy in assembly ~= (old =>{
+		case m if m.toLowerCase.endsWith("manifest.mf") => MergeStrategy.discard
+		case m if m.toLowerCase.matches("meta-inf.*\\.sf$") => MergeStrategy.discard
+		case "log4j.properties" => MergeStrategy.discard
+		case m if m.toLowerCase.startsWith("meta-inf/services/") => MergeStrategy.filterDistinctLines
+		case "reference.conf" => MergeStrategy.concat
+		case _  => MergeStrategy.first
+	}
+)
