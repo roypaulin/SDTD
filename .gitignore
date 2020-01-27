@@ -29,6 +29,8 @@ ssh_config
 **/target/
 **/project/
 !**/project/assembly.sbt
+!**/kubernetes/v4/*
+!**/kubernetes/v4/src/main/scala/*
 
 # Ansible related
 !**/ansible/templates/ssh_config
