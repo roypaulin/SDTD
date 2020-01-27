@@ -1,0 +1,34 @@
+# Env vars
+*.aws_credentials
+*.aws_exports
+*.env
+
+# SSH Keys
+**/ssh_keys/*
+!**/ssh_keys/.gitkeep
+
+ssh_config
+
+# Other dotfiles
+*.vagrant
+*.log
+*.idea
+*.jar
+*.DS_Store
+*.python-version
+
+# Terraform related
+*.terraform
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+
+# SBT related
+**/src/main/scala/*
+!**/src/main/scala/.gitkeep
+**/target/
+**/project/
+!**/project/assembly.sbt
+
+# Ansible related
+!**/ansible/templates/ssh_config

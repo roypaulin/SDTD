@@ -1,0 +1,26 @@
+ForwardAgent yes 
+PubkeyAcceptedKeyTypes=+ssh-dss
+StrictHostKeyChecking no
+UserKnownHostsFile=/dev/null
+
+# To connect to machines, use "ssh -F ssh_config <host_name>"
+
+##
+
+{% for group in groups -%}
+{% if group != "all"  and group != "local" -%}
+{% for host in groups[group] -%}
+{% set ip = hostvars[host].public_ip -%}
+host {{ host }}
+    User ubuntu
+    HostName {{ ip }}
+
+{# ansible uses the IP address darnit #}
+host {{ ip }}
+    User ubuntu
+
+##
+
+{% endfor %}
+{% endif %}
+{% endfor %}
