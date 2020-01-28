@@ -59,7 +59,7 @@
   become: False
   connection: local
   tasks:
-    - name: Generating twitter.scala file from template
+    - name: Generating twitter-subscriber.scala file from template
       template:
-        src: "templates/twitter.scala.j2"
-        dest: "{{ ansible_env.PWD }}/twitter.scala"
+        src: "templates/twitter-subscriber.scala.j2"
+        dest: "{{ ansible_env.PWD }}/twitter-subscriber.scala"

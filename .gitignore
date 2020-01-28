@@ -34,3 +34,6 @@ ssh_config
 
 # Ansible related
 !**/ansible/templates/ssh_config
+
+# Softwares installed by script
+**/utils
