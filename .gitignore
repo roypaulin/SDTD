@@ -27,8 +27,9 @@ ssh_config
 **/src/main/scala/*
 !**/src/main/scala/.gitkeep
 **/target/
-**/project/
-!**/project/assembly.sbt
+**/project/project
+**/project/build.properties
+
 !**/kubernetes/v4/*
 !**/kubernetes/v4/src/main/scala/*
 

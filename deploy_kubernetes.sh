@@ -277,6 +277,16 @@ echo -e "\n-> Deploying kops cluster on AWS...\n"
 
 ${KOPS} update cluster ${CLUSTER_NAME} --yes
 
+echo -e "\n-> Waiting for cluster to be running...\n"
+
+while [[ $(${KOPS} validate cluster) != *"is ready"* ]]
+do
+  echo -e "Please wait..."
+  sleep 30
+done
+echo -e "\nOK: Cluster ready!"
+
+
 #TODO add loop to check if cluster is up with
 # ${KOPS} validate cluster | grep...
 
