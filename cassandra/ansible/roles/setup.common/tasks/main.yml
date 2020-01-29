@@ -1,0 +1,54 @@
+- name: Install aptitude using apt
+  apt: 
+    name: aptitude 
+    state: latest 
+    update_cache: yes 
+    force_apt_get: yes
+
+- name: Install required system packages
+  apt: 
+    name: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools'] 
+    state: latest 
+    update_cache: yes
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu bionic stable
+    state: present
+
+- name: Update apt and install docker-ce
+  apt: 
+    update_cache: yes 
+    name: docker-ce 
+    state: latest
+
+- name: Adding user to Docker group
+  user: 
+    name: "{{ ansible_user }}"
+    groups: docker
+    append: yes
+
+- name: Create requirements
+  template:
+    src: requirements.txt
+    dest: "/home/ubuntu/"
+    mode: 0644
+
+- name: Install python requirements
+  pip: 
+    requirements: "/home/ubuntu/requirements.txt"
+
+- name: Changing hostname of machine
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Configuring /etc/hosts with all hosts
+  blockinfile:
+    path: /etc/hosts
+    content: "{{ lookup('template', 'hosts.j2') }}"
+    state: present

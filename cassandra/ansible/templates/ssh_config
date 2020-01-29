@@ -1,13 +1,13 @@
 ##
 
 {% for group in groups -%}
-{% if group != "all"  and "kafka" in group -%}
+{% if group != "all" and "cassandra" in group -%}
 {% for host in groups[group] -%}
 {% set ip = hostvars[host].public_ip -%}
 host {{ host }}
     User ubuntu
     HostName {{ ip }}
-    IdentityFile ssh_keys/kafka-key
+    IdentityFile ssh_keys/cassandra-key
 
 ##
 

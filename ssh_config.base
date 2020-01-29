@@ -1,0 +1,8 @@
+ForwardAgent yes 
+PubkeyAcceptedKeyTypes=+ssh-dss
+StrictHostKeyChecking no
+UserKnownHostsFile=/dev/null
+
+# To connect to machines, use "ssh -F ssh_config <host_name>"
+
+

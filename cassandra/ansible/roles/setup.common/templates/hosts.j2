@@ -1,5 +1,5 @@
 {% for item in hostvars -%}
-{% if item != "localhost" and "kafka" in item -%}
+{% if item != "localhost" and "cassandra" in item -%}
 {{ hostvars[item].private_ip }}       {{ item }}
 {% endif %}
 {% endfor %}

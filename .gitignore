@@ -25,7 +25,7 @@ ssh_config
 
 # SBT related
 **/src/main/scala/*
-!**/src/main/scala/.gitkeep
+!**/src/main/scala/SDTD/.gitkeep
 **/target/
 **/project/project
 **/project/build.properties

@@ -1,0 +1,18 @@
+- name: Create script to create DB on Cassandra Seed.
+  template:
+    src: createDB.py
+    dest: "/home/ubuntu/"
+    mode: 0755
+
+- name: Running Docker Container with Cassandra Seed
+  docker_container:
+    name: "{{ inventory_hostname }}"
+    auto_remove: yes
+    image: cassandra:latest
+    state: started
+    published_ports:
+      - 7000:7000
+      - 9042:9042
+    env:
+      CASSANDRA_BROADCAST_ADDRESS: "{{ hostvars[inventory_hostname].private_ip }}"
+
