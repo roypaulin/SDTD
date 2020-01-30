@@ -80,9 +80,9 @@ if [ "$1" == "destroy" ]; then
   cd ${CASSANDRA_DIR}/terraform
   ${TERRAFORM} destroy -auto-approve
   if [ $? -eq 0 ]; then
+    rm -rf ${CASSANDRA_DIR}/terraform/.terraform > /dev/null 2>&1
     rm ${CASSANDRA_DIR}/ansible/ssh_config > /dev/null 2>&1
   	rm ${CASSANDRA_DIR}/terraform/*.tfstate* > /dev/null 2>&1
-    rm ${CASSANDRA_DIR}/terraform/.terraform > /dev/null 2>&1
     rm ${CASSANDRA_DIR}/readDB.py > /dev/null 2>&1
     rm ${BASE_DIR}/ssh_keys/cassandra-key* > /dev/null 2>&1
     rm ${BASE_DIR}/ssh_config > /dev/null 2>&1

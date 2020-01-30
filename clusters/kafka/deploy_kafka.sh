@@ -84,9 +84,9 @@ if [ "$1" == "destroy" ]; then
   ${TERRAFORM} destroy -auto-approve
   if [ $? -eq 0 ]; then
     cp ${KAFKA_DIR}/ansible/roles/twitter.environment/templates/.env
-  	rm ${KAFKA_DIR}/ansible/ssh_config > /dev/null 2>&1
+    rm ${KAFKA_DIR}/ansible/ssh_config > /dev/null 2>&1
     rm ${KAFKA_DIR}/terraform/*.tfstate* > /dev/null 2>&1
-    rm ${KAFKA_DIR}/terraform/.terraform > /dev/null 2>&1
+    rm -rf ${KAFKA_DIR}/terraform/.terraform > /dev/null 2>&1
     rm ${BASE_DIR}/SDTD-assembly-1.0.jar > /dev/null 2>&1
     rm ${BASE_DIR}/ssh_keys/kafka-key* > /dev/null 2>&1
   	echo -e "OK: Kafka cluster removed!\n"
