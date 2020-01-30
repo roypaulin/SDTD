@@ -15,16 +15,16 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 BASE_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
-CASSANDRA_DIR="${BASE_DIR}/cassandra"
-KAFKA_DIR="${BASE_DIR}/kafka"
-KUBERNETES_DIR="${BASE_DIR}/kubernetes"
-SPARK_DIR="${BASE_DIR}/spark"
-
-cp ${BASE_DIR}/ssh_config.base ${BASE_DIR}/ssh_config
+CASSANDRA_DIR="${BASE_DIR}/clusters/cassandra"
+KAFKA_DIR="${BASE_DIR}/clusters/kafka"
+KUBERNETES_DIR="${BASE_DIR}/clusters/kubernetes"
+SPARK_DIR="${BASE_DIR}/clusters/spark"
 
 # Check if asked to destroy
 case "$1" in
   "all")
+      cp ${BASE_DIR}/ssh_config.base ${BASE_DIR}/ssh_config
+
       echo -e "\nDeploying all clusters...\n"
       ${CASSANDRA_DIR}/deploy_cassandra.sh
       ${KAFKA_DIR}/deploy_kafka.sh
@@ -32,10 +32,14 @@ case "$1" in
       ${SPARK_DIR}/deploy_spark.sh
       ;;
   "cassandra")
+      cp ${BASE_DIR}/ssh_config.base ${BASE_DIR}/ssh_config
+
       echo -e "\nDeploying only cassandra cluster...\n"
       ${CASSANDRA_DIR}/deploy_cassandra.sh
       ;;
   "kafka")
+      cp ${BASE_DIR}/ssh_config.base ${BASE_DIR}/ssh_config
+      
       echo -e "\nDeploying only kafka cluster...\n"
       ${KAFKA_DIR}/deploy_kafka.sh
       echo "a"

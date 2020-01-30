@@ -15,10 +15,10 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 BASE_DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
-CASSANDRA_DIR="${BASE_DIR}/cassandra"
-KAFKA_DIR="${BASE_DIR}/kafka"
-KUBERNETES_DIR="${BASE_DIR}/kubernetes"
-SPARK_DIR="${BASE_DIR}/spark"
+CASSANDRA_DIR="${BASE_DIR}/clusters/cassandra"
+KAFKA_DIR="${BASE_DIR}/clusters/kafka"
+KUBERNETES_DIR="${BASE_DIR}/clusters/kubernetes"
+SPARK_DIR="${BASE_DIR}/clusters/spark"
 
 # Check if asked to destroy
 case "$1" in
@@ -38,8 +38,12 @@ case "$1" in
       echo "a"
       ;;
   "kubernetes")
-      echo -e "\nDestroying only kubernetes cluster (with or without kafka)...\n\n"
+      echo -e "\nDestroying only kubernetes cluster (with or without kafka)...\n"
       ${KUBERNETES_DIR}/deploy_kubernetes.sh destroy
+      ;;
+  "utils")
+      echo -e "\nRemoving utils installed by script...\n"
+      rm -rf ${BASE_DIR}/utils
       ;;
   *)
     echo -e "ERROR: Invalid option. Please use one of the following:"

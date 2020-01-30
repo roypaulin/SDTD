@@ -1,0 +1,18 @@
+##
+
+{% for group in groups -%}
+{% if group != "all" -%}
+{% for host in groups[group] -%}
+{% if "cassandra" in host -%}
+{% set ip = hostvars[host].public_ip -%}
+host {{ host }}
+    User ubuntu
+    HostName {{ ip }}
+    IdentityFile ssh_keys/cassandra-key
+
+##
+
+{% endif %}
+{% endfor %}
+{% endif %}
+{% endfor %}

@@ -1,0 +1,37 @@
+- name: Creating local SSH Config
+  hosts: localhost
+  become: False
+  connection: local
+  tasks:
+    - name: Generating ssh_config from template
+      template:
+        src: "templates/ssh_config"
+        dest: "{{ ansible_env.PWD }}/ssh_config"
+
+- name: Installing Docker and settings common configs
+  hosts: cassandra_seed:cassandra_node
+  tasks:
+  - import_role:
+      name: setup.common
+  
+- name: Launching Cassandra seed
+  hosts: cassandra_seed
+  tasks:
+  - import_role:
+      name: setup.seed
+  
+- name: Launching Cassandra node
+  hosts: cassandra_node
+  tasks:
+  - import_role:
+      name: setup.node
+
+- name: Creating local readDB Config
+  hosts: localhost
+  become: False
+  connection: local
+  tasks:
+    - name: Generating readDB from template
+      template:
+        src: "templates/readDB.py"
+        dest: "{{ ansible_env.PWD }}/readDB.py"

@@ -24,7 +24,7 @@ ssh_config
 *.tfstate.lock.info
 
 # SBT related
-**/src/main/scala/*
+**/src/main/scala/SDTD/*
 !**/src/main/scala/SDTD/.gitkeep
 **/target/
 **/project/project

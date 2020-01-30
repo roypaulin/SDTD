@@ -1,5 +1,6 @@
 # SDTD
-Softwares necessary to run (with version that was used testing)
+
+##Pre-Requirements:
  - Java 8
  - python v3.7 (with boto)
  - terraform v0.12.12
@@ -9,6 +10,7 @@ Softwares necessary to run (with version that was used testing)
  - aws v1
  - docker
 
+## Environment
 1) Set environment variables (Use the .examples as base)
   (AWS Credentials)
     - cp env/aws.env.example env/aws.env (and edit the file)
@@ -20,11 +22,30 @@ Softwares necessary to run (with version that was used testing)
 2) Install python requirements on your environment
   - pip install -r requirements.txt
 
-3) Run deploy_cassandra.sh to deploy cassandra cluster
-4) Run deploy_kafka.sh to deploy kafka cluster
-5) Run deploy_kubernetes.sh to deploy kubernetes cluster with spark on it
 
-6) To destroy instances afterwards, run 
-- deploy_cassandra.sh destroy 
-- deploy_kafka.sh destroy 
-- deploy_kubernetes.sh destroy 
+## Deploying
+3.1) Deploy clusters! (This might take up to 30 minutes)
+  - deploy.sh all
+
+3.2) You can also deploy individual parts with:
+  - deploy.sh cassandra
+  - deploy.sh kafka
+  - deploy.sh kubernetes
+  - deploy.sh spark (depends on kubernetes)
+
+## Test
+4) Read contents saved on Cassandra's cluster (frequency of #hashtags)
+  - ./clusters/cassandra/readDB.py
+
+NOTE: This won't work if you're connected to Ensimag's network because of their firewall. Alternatinavelly you can do:
+  - ssh -f -F ssh_config cassandra-seed-01 'python3 -u readDB.py' 
+
+## Destroying
+5.1) To destroy instances afterwards, run 
+  - destroy.sh all 
+
+5.2) You can also deploy individual parts with:
+  - destroy.sh cassandra
+  - destroy.sh kafka
+  - destroy.sh kubernetes (destroy kafka together)
+  
