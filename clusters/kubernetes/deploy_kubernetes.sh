@@ -151,7 +151,6 @@ if [ "$1" == "destroy" ]; then
   	echo -e "\nOK: Kubernetes cluster destroyed!"
   	rm ${BASE_DIR}/ssh_keys/kubernetes-key* > /dev/null 2>&1
     rm ${KUBERNETES_DIR}/dashboard_token.txt > /dev/null 2>&1
-    rm ${KUBERNETES_DIR}/dashboard.log > /dev/null 2>&1
   	echo -e "\n-> Removing s3 bucket with kops state...\n"
   	${AWS} s3 rb ${KOPS_STATE_STORE} --region=${AWS_REGION} --force 
   	if [ $? -eq 0 ]; then

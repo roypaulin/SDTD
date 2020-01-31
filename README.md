@@ -45,6 +45,11 @@
 
     ``$ deploy.sh spark`` (depends on kubernetes)
 
+    **EXPERIMENTAL**: It's also possible to deploy the appliation running a docker image to avoid OS issues, but it's not yet fully tested and functionnal.
+
+    ``$ docker build -t sdtd .``
+
+    ``$ docker run --rm sdtd deploy.sh all``
 ## Testing
 1) Read contents saved on Cassandra's cluster (frequency of #hashtags) 
 
@@ -65,4 +70,14 @@
   
     ``$ destroy.sh kafka``
   
-    ``$ destroy.sh kubernetes`` (destroy kafka together)
+    ``$ destroy.sh kubernetes`` (destroy spark together)
+
+    ``$ destroy.sh spark``
+
+    ``$ destroy.sh utils`` (remove installed utils on folder 'utils/')
+
+    **EXPERIMENTAL**: It's also possible to deploy the appliation running a docker image to avoid OS issues, but it's not yet fully tested and functionnal.
+
+    ``$ docker build -t sdtd .``
+
+    ``$ docker run --rm sdtd destroy.sh all``

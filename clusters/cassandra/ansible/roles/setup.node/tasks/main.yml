@@ -8,5 +8,5 @@
       - 7000:7000
       - 9042:9042
     env:
-      CASSANDRA_BROADCAST_ADDRESS: "{{ hostvars[inventory_hostname].private_ip }}"
-      CASSANDRA_SEEDS: "{{ hostvars['cassandra-seed-01'].private_ip }}"
+      CASSANDRA_BROADCAST_ADDRESS: "{{ hostvars[inventory_hostname].public_ip }}"
+      CASSANDRA_SEEDS: "{{ hostvars['cassandra-seed-01'].public_ip }}"

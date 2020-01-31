@@ -76,6 +76,8 @@ echo -e "\n-> Checking if spark is installed..."
 
 if [ -f ${UTILS_DIR}/spark/bin/spark-submit ]; then
   SPARK_SUBMIT=${UTILS_DIR}/spark/bin/spark-submit
+elif [ -x "$(command -v spark-submit)" ]; then
+  SPARK_SUBMIT="$(command -v spark-submit)"
 else
   echo -e "\nspark not found. Installing spark into folder utils..."
 
@@ -135,6 +137,23 @@ fi
 
 # Load environment variables
 source ${BASE_DIR}/env/aws.env
+
+# Check if asked to destroy
+if [ "$1" == "destroy" ]; then
+  echo -e "\n-> Destroying spark pod..."
+  
+  rm ${SPARK_DIR}/spark_submit.log > /dev/null 2>&1
+
+  POD_NAME=$(${KUBECTL} get pods | awk '/sdtd-.*-driver/ {print $1}')
+  ${KUBECTL} delete pods ${POD_NAME}
+  if [ $? -eq 0 ]; then
+    echo -e "\nOK: Spark pod destroyed!"
+    exit 0
+  else
+    echo -e "\nProblem removing spark pod.\n"
+    exit 1
+  fi
+fi
 
 cd ${SPARK_DIR}/twitter
 
@@ -198,9 +217,8 @@ ${SPARK_SUBMIT} \
    --conf spark.kubernetes.container.image=${DOCKER_USERNAME}/spark:${TIMESTAMP} \
    --conf spark.kubernetes.namespace=default \
    --conf spark.kubernetes.authenticate.driver.serviceAccountName=spark \
-    local:///opt/spark/jars/SDTD-assembly-1.0.jar
+    local:///opt/spark/jars/SDTD-assembly-1.0.jar &> ${SPARK_DIR}/spark_submit.log &
 
-# &> ${SPARK_DIR}/spark_submit.log &
 
 echo -e "\nSpark job submited! You can check saved hashtags with one of the two:"
 echo -e "ssh -f -F ssh_config 'python3 readDB.py'"

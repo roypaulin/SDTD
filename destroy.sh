@@ -38,8 +38,12 @@ case "$1" in
       echo "a"
       ;;
   "kubernetes")
-      echo -e "\nDestroying only kubernetes cluster (with or without kafka)...\n"
+      echo -e "\nDestroying only kubernetes cluster (with or without spark)...\n"
       ${KUBERNETES_DIR}/deploy_kubernetes.sh destroy
+      ;;
+  "spark")
+      echo -e "\nDestroying spark pod...\n"
+      ${SPARK_DIR}/deploy_spark.sh destroy
       ;;
   "utils")
       echo -e "\nRemoving utils installed by script...\n"
@@ -51,5 +55,6 @@ case "$1" in
     echo -e "./destroy.sh cassandra"
     echo -e "./destroy.sh kafka"
     echo -e "./destroy.sh kubernetes"
+    echo -e "./destroy.sh spark"
     ;;
 esac

@@ -38,3 +38,9 @@ ssh_config
 
 # Softwares installed by script
 **/utils
+
+# Cassandra related
+**/clusters/cassandra/readDB.py
+
+# Kubernetes related
+**/clusters/kubernetes/dashboard_token.txt
